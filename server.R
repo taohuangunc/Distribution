@@ -7,12 +7,12 @@ mean.icon <- icon("star", lib = "glyphicon")
 variance.icon <- icon("resize-horizontal", lib = "glyphicon")
 server <- function(input, output) {
   ################################################################################
-  # 正規分布
+  # Normal distribution
   ###########################################################################
   output$normal.meanBox <- renderValueBox({
     valueBox(
       withMathJax(paste0("\\(\\mu\\!=\\!", input$norm.mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -21,7 +21,7 @@ server <- function(input, output) {
     var <- input$norm.sd ** 2
     valueBox(
       withMathJax(paste0("\\(\\sigma^2\\!=\\!", var, "\\)")),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -35,14 +35,14 @@ server <- function(input, output) {
     return(df)
   })
   ################################################################################
-  # アーラン分布
+  #  
   ###########################################################################
   output$erlang.meanBox <- renderValueBox({
     mean <- input$erlang.shape / input$erlang.scale
     mean <- round(mean, digits = 3)
     box <- valueBox(
       withMathJax(paste0("\\(n/\\lambda\\!=\\!", mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -54,7 +54,7 @@ server <- function(input, output) {
     var <- round(var, digits = 3)
     box <- valueBox(
       withMathJax(paste0("\\(n/\\lambda^2\\!=\\!", var, "\\)")),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -71,14 +71,14 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # F分布
+  # F distribution
   ###########################################################################
   output$f.meanBox <- renderValueBox({
     mean <- input$f.df2 / (input$f.df2 - 2)
     mean <- round(mean, digits = 3)
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{d_2}{d_2-2}\\!=\\!", mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -93,7 +93,7 @@ server <- function(input, output) {
       withMathJax(paste0("\\(\\frac{2\\,d_2^2\\,(d_1+d_2-2)}{d_1 (d_2-2)^2 (d_2-4)}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -113,7 +113,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 非心F分布
+  # NC F-dist
   ###########################################################################
   output$ncf.meanBox <- renderValueBox({
     mean <- (input$ncf.df2 * (input$ncf.df1 + input$ncf.ncp)) /
@@ -122,7 +122,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{\\nu_2(\\nu_1 + \\lambda)}{\\nu_1(\\nu_2-2)}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -139,7 +139,7 @@ server <- function(input, output) {
         \\left(\\frac{\\nu_2}{\\nu_1}\\right)^2\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -158,14 +158,14 @@ server <- function(input, output) {
     return(df)
   })
   ################################################################################
-  # カイ二乗分布
+  # chisquare
   ###########################################################################
   output$chisq.meanBox <- renderValueBox({
     mean <- input$chisq.df
     box <- valueBox(
       withMathJax(paste0("\\(k\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -179,7 +179,7 @@ server <- function(input, output) {
         "\\(2k\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -198,7 +198,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 非心カイ二乗分布
+  # NC chi-square
   ###########################################################################
   output$ncChisq.meanBox <- renderValueBox({
     mean <- input$ncChisq.df + input$ncChisq.ncp
@@ -206,7 +206,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(k+\\lambda\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -221,7 +221,7 @@ server <- function(input, output) {
         "\\(2(k+2\\lambda)\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -240,7 +240,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # ガンマ分布
+  # Gamma 
   ###########################################################################
   output$gamma.meanBox <- renderValueBox({
     mean <- input$gamma.shape * input$gamma.scale
@@ -248,7 +248,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(k\\theta\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -262,7 +262,7 @@ server <- function(input, output) {
       withMathJax(paste0("\\(k\\theta^2\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -281,12 +281,12 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # コーシー分布
+  # Cauchy
   ###########################################################################
   output$cauchy.meanBox <- renderValueBox({
     box <- valueBox(
-      "定義されない",
-      "期待値",
+      "Definition",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -295,8 +295,8 @@ server <- function(input, output) {
 
   output$cauchy.varianceBox <- renderValueBox({
     box <- valueBox(
-      "定義されない",
-      "分散",
+      "Definition",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -312,7 +312,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 指数分布
+  # Exponential
   ###########################################################################
   output$exp.meanBox <- renderValueBox({
     mean <- 1 / input$exp.rate
@@ -320,7 +320,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{1}{\\lambda}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -334,7 +334,7 @@ server <- function(input, output) {
       withMathJax(paste0("\\(\\frac{1}{\\lambda^2}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -350,7 +350,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 対数正規分布
+  # Lognormal 
   ###########################################################################
   output$lnormal.meanBox <- renderValueBox({
     mean <- exp(input$lnormal.meanlog + ((input$lnormal.sdlog ** 2) / 2))
@@ -358,7 +358,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(e^{\\mu+\\sigma^2/2}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -373,7 +373,7 @@ server <- function(input, output) {
       withMathJax(paste0("\\(e^{2\\mu+\\sigma^2}(e^{\\sigma^2}-1)\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -389,13 +389,13 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # t分布
+  # t 
   ###########################################################################
   output$t.meanBox <- renderValueBox({
     mean <- 0
     box <- valueBox(
       withMathJax("\\(e^{\\mu+\\sigma^2/2}\\!=\\!0\\)"),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -413,7 +413,7 @@ server <- function(input, output) {
       withMathJax(paste0("\\(\\frac{\\nu}{\\nu-2}\\!=\\!",
         var, "\\)")
       ),
-      "分散 (自由度が2以下のときは∞)",
+      "Variance (df > 2)",
       icon = variance.icon,
       color = boxcolor
     )
@@ -429,11 +429,11 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 非心t分布
+  # NC t 
   ###########################################################################
   output$nct.meanBox <- renderValueBox({
     if (input$nct.df <= 1) {
-      meanformula <- "定義されない"
+      meanformula <- "Definition"
     } else {
       mean <- input$nct.ncp * sqrt(input$nct.df / 2) * 
         gamma((input$nct.df - 1) / 2) / gamma(input$nct.df / 2)
@@ -445,7 +445,7 @@ server <- function(input, output) {
     }
     box <- valueBox(
       meanformula,
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -454,7 +454,7 @@ server <- function(input, output) {
 
   output$nct.varianceBox <- renderValueBox({
     if (input$nct.df <= 2){
-      varformula <- "定義されない"
+      varformula <- "Definition"
     } else {
       var <- (input$nct.df * (1 + input$nct.ncp ** 2)) / (input$nct.df - 2) -
         ((input$nct.ncp ** 2) * input$nct.df / 2) * 
@@ -469,7 +469,7 @@ server <- function(input, output) {
     }
     box <- valueBox(
       varformula,
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -485,7 +485,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # ベータ分布
+  # 
   ###########################################################################
   output$beta.meanBox <- renderValueBox({
     mean <- input$beta.shape1 / (input$beta.shape1 + input$beta.shape2)
@@ -493,7 +493,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{\\alpha}{\\alpha+\\beta}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -510,7 +510,7 @@ server <- function(input, output) {
         "\\(\\frac{\\alpha\\beta}{(\\alpha+\\beta)^2 (\\alpha+\\beta+1)}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -531,7 +531,7 @@ server <- function(input, output) {
     return(df)
   })
   ################################################################################
-  # 非心ベータ分布
+  # NC beta
   ###########################################################################
   output$ncbeta.meanBox <- renderValueBox({
     mean <- exp(- input$ncbeta.ncp / 2) * input$ncbeta.shape1 *
@@ -548,7 +548,7 @@ server <- function(input, output) {
         \\right)
         \\!=\\!",
         mean, "\\)")),
-      "期待値μ",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -579,7 +579,7 @@ server <- function(input, output) {
         \\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -605,7 +605,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 連続一様分布
+  # 
   ###########################################################################
   output$unif.meanBox <- renderValueBox({
     mean <- (input$unif.range[1] + input$unif.range[2]) / 2
@@ -613,7 +613,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{1}{2}(a+b)\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -628,7 +628,7 @@ server <- function(input, output) {
         "\\(\\frac{1}{12}(b-a)^2\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -644,14 +644,14 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # ロジスティック分布
+  #  
   ###########################################################################
   output$logis.meanBox <- renderValueBox({
     mean <- input$logis.location
     box <- valueBox(
       withMathJax(paste0("\\(\\mu\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -668,7 +668,7 @@ server <- function(input, output) {
         \\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -683,7 +683,7 @@ server <- function(input, output) {
     return(df)
   })
   ################################################################################
-  # ロジスティック分布
+  #  
   ###########################################################################
   output$weibull.meanBox <- renderValueBox({
     mean <- input$weibull.scale * gamma(1 + 1 / input$weibull.shape)
@@ -691,7 +691,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\eta \\Gamma(1+1/m)\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -710,7 +710,7 @@ server <- function(input, output) {
         \\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -729,7 +729,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 幾何分布
+  # Geo
   ###########################################################################
   output$geom.meanBox <- renderValueBox({
     mean <- (1 - input$geom.prob) / input$geom.prob
@@ -737,7 +737,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{1-p}{p}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -752,7 +752,7 @@ server <- function(input, output) {
         "\\(\\frac{1-p}{p^2}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -768,7 +768,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 超幾何分布
+  # HG 
   ###########################################################################
   output$hyper.meanBox <- renderValueBox({
     mean <- input$hyper.k * input$hyper.m / (input$hyper.m + input$hyper.n)
@@ -776,7 +776,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{km}{m+n}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -793,7 +793,7 @@ server <- function(input, output) {
         "\\(\\frac{kmn(m+n-k)}{(m+n)^2 (m+n-1)}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -809,7 +809,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 二項分布
+  # Binomial 
   ###########################################################################
   output$binom.meanBox <- renderValueBox({
     mean <- input$binom.size * input$binom.prob
@@ -817,7 +817,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(np\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -832,7 +832,7 @@ server <- function(input, output) {
         "\\(np(1-p)\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -848,7 +848,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 負の二項分布
+  # Negative Binomial 
   ###########################################################################
   output$nbinom.meanBox <- renderValueBox({
     mean <- input$nbinom.size / input$nbinom.prob
@@ -856,7 +856,7 @@ server <- function(input, output) {
     box <- valueBox(
       withMathJax(paste0("\\(\\frac{r}{p}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -871,7 +871,7 @@ server <- function(input, output) {
         "\\(\\frac{r(1-p)}{p^2}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -887,14 +887,14 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # ポアソン分布
+  #  Poisson
   ###########################################################################
   output$pois.meanBox <- renderValueBox({
     mean <- input$pois.lambda
     box <- valueBox(
       withMathJax(paste0("\\(\\lambda\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -908,7 +908,7 @@ server <- function(input, output) {
         "\\(\\lambda\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )
@@ -924,7 +924,7 @@ server <- function(input, output) {
   })
 
   ################################################################################
-  # 連続一様分布
+  # uniform
   ###########################################################################
   output$dunif.meanBox <- renderValueBox({
     mean <- (input$dunif.range[1] + input$dunif.range[2]) / 2
@@ -933,7 +933,7 @@ server <- function(input, output) {
       withMathJax(paste0(
         "\\(\\frac{a+b}{2}\\!=\\!",
         mean, "\\)")),
-      "期待値",
+      "Expectation",
       icon = mean.icon,
       color = boxcolor
     )
@@ -948,7 +948,7 @@ server <- function(input, output) {
         "\\(\\frac{(b-a+1)^2 -1}{12}\\!=\\!",
         var, "\\)")
       ),
-      "分散",
+      "Variance",
       icon = variance.icon,
       color = boxcolor
     )

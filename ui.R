@@ -2,7 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(rmarkdown)
 
-pageTitle <- "確率分布いろいろ"
+pageTitle <- "Distributions"
 
 # JavaScript Files
 jsFiles <- tags$head(
@@ -10,23 +10,11 @@ jsFiles <- tags$head(
 )
 
 # Panel for Distributions
-distPanel <- function(name, en) {
-  if (missing(en)) {
+distPanel <- function(name) {
     box(width = 5,
         status = "primary",
         title = name,
-        "参考 : ",
-      a(target = "_blank",
-        href = paste0('http://ja.wikipedia.org/wiki/', name),
-        'Wikipedia',
-        img(src = 'img/external.png')
-      )
-    )
-  } else {
-    box(width = 5,
-        status = "primary",
-        title = name,
-        "参考 : ",
+        "Reference : ",
       a(target = "_blank",
         href = paste0('http://en.wikipedia.org/wiki/', en),
         'Wikipedia',
@@ -40,74 +28,33 @@ header <- dashboardHeader(title = pageTitle)
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
-    menuItem("連続分布", icon = icon("line-chart"),
-      menuSubItem("正規分布", tabName = "norm"),
-      menuSubItem("アーラン分布", tabName = "erlang"),
-      menuSubItem("F分布", tabName = "f"),
-      menuSubItem("非心F分布", tabName = "ncf"),
-      menuSubItem("カイ二乗分布", tabName = "chisq"),
-      menuSubItem("非心カイ二乗分布", tabName = "ncChisq"),
-      menuSubItem("ガンマ分布", tabName = "gamma"),
-      menuSubItem("コーシー分布", tabName = "cauchy"),
-      menuSubItem("指数分布", tabName = "exp"),
-      menuSubItem("対数正規分布", tabName = "lnormal"),
-      menuSubItem("t分布", tabName = "t"),
-      menuSubItem("非心t分布", tabName = "nct"),
-      menuSubItem("ベータ分布", tabName = "beta"),
-      menuSubItem("非心ベータ分布", tabName = "ncbeta"),
-      menuSubItem("連続一様分布", tabName = "unif"),
-      menuSubItem("ロジスティック分布", tabName = "logis"),
-      menuSubItem("ワイブル分布", tabName = "weibull")
+    menuItem("Continuous", icon = icon("line-chart"),
+      menuSubItem("Normal", tabName = "norm"),
+      menuSubItem("Erlang", tabName = "erlang"),
+      menuSubItem("F", tabName = "f"),
+      menuSubItem("NC F", tabName = "ncf"),
+      menuSubItem("Chi-squares", tabName = "chisq"),
+      menuSubItem("NC Chisq", tabName = "ncChisq"),
+      menuSubItem("Gamma", tabName = "gamma"),
+      menuSubItem("Cauchy", tabName = "cauchy"),
+      menuSubItem("Exponential", tabName = "exp"),
+      menuSubItem("Log Normal", tabName = "lnormal"),
+      menuSubItem("T", tabName = "t"),
+      menuSubItem("NC T", tabName = "nct"),
+      menuSubItem("Beta", tabName = "beta"),
+      menuSubItem("NC Beta", tabName = "ncbeta"),
+      menuSubItem("Uniform", tabName = "unif"),
+      menuSubItem("Logis", tabName = "logis"),
+      menuSubItem("Weibull", tabName = "weibull")
     ),
-    menuItem("離散分布", icon = icon("bar-chart-o"),
-      menuSubItem("幾何分布", tabName = "geom"),
-      menuSubItem("超幾何分布", tabName = "hyper"),
-      menuSubItem("二項分布", tabName = "binom"),
-      menuSubItem("負の二項分布", tabName = "nbinom"),
-      menuSubItem("ポアソン分布", tabName = "pois"),
-      menuSubItem("離散一様分布", tabName = "dunif")
+    menuItem("Discrete", icon = icon("bar-chart-o"),
+      menuSubItem("Geometric", tabName = "geom"),
+      menuSubItem("Hyper Geometric", tabName = "hyper"),
+      menuSubItem("Binomial", tabName = "binom"),
+      menuSubItem("Negative Binomial", tabName = "nbinom"),
+      menuSubItem("Poisson", tabName = "pois"),
+      menuSubItem("Dunif", tabName = "dunif")
     ),
-    menuItem("About", icon = icon("info"),
-      tabName = "about"
-    ),
-    menuItem("English", icon = icon("external-link"),
-      href = "https://kaz-yos.shinyapps.io/ShinyDistributionsApp/"
-    ),
-    menuItem("Source code for app", icon = icon("github"),
-      href = "http://github.com/ksmzn/ShinyDistributionsApp"
-    ),
-    tags$li(
-      a( href = "http://twitter.com/intent/tweet?text=いろいろな確率分布のパラメータをいじくるアプリ&url=http://statdist.ksmzn.com/&via=ksmzn&hashtags=rshiny",
-        target = "_blank",
-        icon("twitter"),
-        onClick = "window.open(encodeURI(decodeURI(this.href)),
-          'tweetwindow',
-          'width=550, height=450, personalbar=0, toolbar=0, scrollbars=1, resizable=1'
-          ); return false;",
-        span('Tweet'),
-        tags$small(
-          class = paste0("badge pull-right bg-", 'light-blue'),
-          'Share'
-        )
-      )
-    ),
-    tags$li(
-      a( href = "http://www.facebook.com/sharer.php?u=http://statdist.ksmzn.com/&t=いろいろな確率分布のパラメータをいじくるアプリ",
-        target = "_blank",
-        icon("facebook"),
-        span('Facebook'),
-        tags$small(
-          class = paste0("badge pull-right bg-", 'light-blue'),
-          'Share'
-        )
-      )
-    ),
-    menuItem("@ksmzn", icon = icon("twitter"),
-      href = "https://twitter.com/ksmzn"
-    ),
-    menuItem("Blog", icon = icon("pencil"),
-      href = "http://ksmzn.hatenablog.com/"
-    )
   )
 )
 
@@ -121,14 +68,14 @@ board.about <- tabItem(tabName = "about",
 ####################################################
 # Tab Items for Distributions
 ####################################################
-# 連続分布
+#  
 board.norm <- tabItem(tabName = "norm",
   fluidRow(
-    distPanel("正規分布"),
+    distPanel("Normal"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x)=\\frac{1}{\\sqrt{2\\pi\\sigma^{2}}}
         \\exp\\!\\left(-\\frac{(x-\\mu)^2}{2\\sigma^2} \\right)
@@ -139,23 +86,23 @@ board.norm <- tabItem(tabName = "norm",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "Normal", status = "primary", solidHeader = TRUE,
       radioButtons(paste("norm", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("norm", "range", sep="."), "範囲",
+      sliderInput(paste("norm", "range", sep="."), "Range",
         min = -100, max = 100, value = c(-10, 10), step= 1
       ),
-      sliderInput(paste("norm", "mean", sep="."), "平均 \\(\\mu\\)",
+      sliderInput(paste("norm", "mean", sep="."), "Expectation \\(\\mu\\)",
         min = -50, max = 50, value = 0, step= 1
       ),
-      sliderInput(paste("norm", "sd", sep="."), "標準偏差 \\(\\sigma\\)",
+      sliderInput(paste("norm", "sd", sep="."), "SD \\(\\sigma\\)",
         min = 0, max = 10, value = 1, step= 0.5
       )
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("normalPlot", 'line')
     )
   ),
@@ -168,11 +115,11 @@ board.norm <- tabItem(tabName = "norm",
 
 board.erlang <- tabItem(tabName = "erlang",
   fluidRow(
-    distPanel("アーラン分布"),
+    distPanel("Erlang"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x; n, \\lambda)=
         {\\lambda^{n} x^{n-1} e^{-\\lambda x} \\over (n-1)!}\\quad\\mbox{for }x>0
@@ -183,11 +130,11 @@ board.erlang <- tabItem(tabName = "erlang",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "Erlang", status = "primary", solidHeader = TRUE,
       radioButtons(paste("erlang", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("erlang", "range", sep="."), "範囲",
+      sliderInput(paste("erlang", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
       sliderInput(paste("erlang", "shape", sep="."), "\\(n\\)",
         min = 1, max = 20, value = 1, step= 1),
@@ -196,7 +143,7 @@ board.erlang <- tabItem(tabName = "erlang",
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "fdddasd", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("erlangPlot", 'line')
     )
   ),
@@ -209,11 +156,11 @@ board.erlang <- tabItem(tabName = "erlang",
 
 board.f <- tabItem(tabName = "f",
   fluidRow(
-    distPanel("F分布"),
+    distPanel("F"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x) = \\frac{1}{\\mathrm{B}(d_1/2, d_2/2)} \\; 
         \\left(\\frac{d_1\\,x}{d_1\\,x + d_2}\\right)^{d_1/2} \\; 
@@ -225,20 +172,20 @@ board.f <- tabItem(tabName = "f",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "adsf", status = "primary", solidHeader = TRUE,
       radioButtons(paste("f", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("f", "range", sep="."), "範囲",
+      sliderInput(paste("f", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("f", "df1", sep="."), "自由度 \\(d_1\\)",
+      sliderInput(paste("f", "df1", sep="."), "DF \\(d_1\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("f", "df2", sep="."), "自由度 \\(d_2\\)",
+      sliderInput(paste("f", "df2", sep="."), "DF \\(d_2\\)",
         min = 1, max = 20, value = 1, step= 1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("fPlot", 'line')
     )
   ),
@@ -251,11 +198,11 @@ board.f <- tabItem(tabName = "f",
 
 board.ncf <- tabItem(tabName = "ncf",
   fluidRow(
-    distPanel("非心F分布", "Noncentral_F-distribution"),
+    distPanel("NC F", "Noncentral_F-distribution"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
       f(x) =\\sum\\limits_{k=0}^\\infty
       \\frac{e^{-\\lambda/2}(\\lambda/2)^k}
@@ -271,22 +218,22 @@ $$")
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "nc f", status = "primary", solidHeader = TRUE,
       radioButtons(paste("ncf", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("ncf", "range", sep="."), "範囲",
+      sliderInput(paste("ncf", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("ncf", "df1", sep="."), "自由度 \\(\\nu_1\\)",
+      sliderInput(paste("ncf", "df1", sep="."), "DF \\(\\nu_1\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("ncf", "df2", sep="."), "自由度 \\(\\nu_2\\)",
+      sliderInput(paste("ncf", "df2", sep="."), "DF \\(\\nu_2\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("ncf", "ncp", sep="."), "非中心度 \\(\\lambda\\)",
+      sliderInput(paste("ncf", "ncp", sep="."), "NC degree \\(\\lambda\\)",
         min = 0, max = 20, value = 0, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("ncfPlot", 'line')
     )
   ),
@@ -299,11 +246,11 @@ $$")
 
 board.chisq <- tabItem(tabName = "chisq",
   fluidRow(
-    distPanel("カイ二乗分布"),
+    distPanel("chisq"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x;k)=\\frac{(1/2)^{k/2}}{\\Gamma(k/2)} x^{k/2 - 1} e^{-x/2}
         \\ \\ \\ \\ \\mathrm{for\\ } x > 0
@@ -314,18 +261,18 @@ board.chisq <- tabItem(tabName = "chisq",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "adfs", status = "primary", solidHeader = TRUE,
       radioButtons(paste("chisq", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("chisq", "range", sep="."), "範囲",
+      sliderInput(paste("chisq", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("chisq", "df", sep="."), "自由度 \\(k\\)",
+      sliderInput(paste("chisq", "df", sep="."), "DF \\(k\\)",
         min = 1, max = 20, value = 1, step= 1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "adfaf", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("chisqPlot", 'line')
     )
   ),
@@ -338,11 +285,11 @@ board.chisq <- tabItem(tabName = "chisq",
 
 board.ncChisq <- tabItem(tabName = "ncChisq",
   fluidRow(
-    distPanel("非心カイ二乗分布"),
+    distPanel("NC chi"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f_X(x; k,\\lambda) =
         \\sum_{i=0}^\\infty \\frac{e^{-\\lambda/2} (\\lambda/2)^i}{i!} f_{Y_{k+2i}}(x),
@@ -366,20 +313,20 @@ board.ncChisq <- tabItem(tabName = "ncChisq",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "adfda", status = "primary", solidHeader = TRUE,
       radioButtons(paste("ncChisq", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("ncChisq", "range", sep="."), "範囲",
+      sliderInput(paste("ncChisq", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("ncChisq", "df", sep="."), "自由度 \\(k\\)",
+      sliderInput(paste("ncChisq", "df", sep="."), "DF \\(k\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("ncChisq", "ncp", sep="."), "非中心度 \\(\\lambda\\)",
+      sliderInput(paste("ncChisq", "ncp", sep="."), "NC degree \\(\\lambda\\)",
         min = 0, max = 20, value = 0, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("ncChisqPlot", 'line')
     )
   ),
@@ -392,11 +339,11 @@ board.ncChisq <- tabItem(tabName = "ncChisq",
 
 board.gamma <- tabItem(tabName = "gamma",
   fluidRow(
-    distPanel("ガンマ分布"),
+    distPanel("Gamma"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x) = x^{k-1} \\frac{e^{-x/\\theta}}{\\Gamma(k)\\,\\theta^k}
         \\ \\ \\ \\ \\mathrm{for\\ } x > 0
@@ -407,20 +354,20 @@ board.gamma <- tabItem(tabName = "gamma",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "afda", status = "primary", solidHeader = TRUE,
       radioButtons(paste("gamma", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("gamma", "range", sep="."), "範囲",
+      sliderInput(paste("gamma", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("gamma", "shape", sep="."), "形状 \\(k\\)",
+      sliderInput(paste("gamma", "shape", sep="."), "Shape \\(k\\)",
         min = 0, max = 20, value = 1, step= 0.1),
-      sliderInput(paste("gamma", "scale", sep="."), "尺度 \\(\\theta\\)",
+      sliderInput(paste("gamma", "scale", sep="."), "Scale \\(\\theta\\)",
         min = 0, max = 20, value = 1, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("gammaPlot", 'line')
     )
   ),
@@ -433,11 +380,11 @@ board.gamma <- tabItem(tabName = "gamma",
 
 board.cauchy <- tabItem(tabName = "cauchy",
   fluidRow(
-    distPanel("コーシー分布"),
+    distPanel("cauchy"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         \\begin{align}
         f(x; x_0,\\gamma) &=
@@ -450,20 +397,20 @@ board.cauchy <- tabItem(tabName = "cauchy",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "cauchy", status = "primary", solidHeader = TRUE,
       radioButtons(paste("cauchy", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("cauchy", "range", sep="."), "範囲",
+      sliderInput(paste("cauchy", "range", sep="."), "Range",
         min = -100, max = 100, value = c(-10, 10), step= 0.5),
-      sliderInput(paste("cauchy", "location", sep="."), "位置 \\(x_0\\)",
+      sliderInput(paste("cauchy", "location", sep="."), "Location \\(x_0\\)",
         min = -20, max = 20, value = 0, step= 0.1),
-      sliderInput(paste("cauchy", "scale", sep="."), "尺度 \\(\\gamma\\)",
+      sliderInput(paste("cauchy", "scale", sep="."), "Scale \\(\\gamma\\)",
         min = 0, max = 20, value = 1, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("cauchyPlot", 'line')
     )
   ),
@@ -476,11 +423,11 @@ board.cauchy <- tabItem(tabName = "cauchy",
 
 board.exp <- tabItem(tabName = "exp",
   fluidRow(
-    distPanel("指数分布"),
+    distPanel("Exponential"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
       f(x; \\lambda) = \\left\\{
         \\begin{array}{ll}
@@ -494,18 +441,18 @@ board.exp <- tabItem(tabName = "exp",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "exp", status = "primary", solidHeader = TRUE,
       radioButtons(paste("exp", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("exp","range",sep="."), "範囲",
+      sliderInput(paste("exp","range",sep="."), "Range",
         min = -10, max = 50, value = c(0, 5), step= 1),
       sliderInput(paste("exp","rate",sep="."), "\\(\\lambda\\)",
         min = 0, max = 20, value = 1, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("expPlot", 'line')
     )
   ),
@@ -518,11 +465,11 @@ board.exp <- tabItem(tabName = "exp",
 
 board.lnormal <- tabItem(tabName = "lnormal",
   fluidRow(
-    distPanel("対数正規分布"),
+    distPanel("Log normal"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
       f(x) = \\frac{1}{\\sqrt{2\\pi} \\sigma x} e^{-\\frac{ (\\ln{x}-\\mu)^2}{2\\sigma^2} },
       \\quad 0<x< \\infty
@@ -533,20 +480,20 @@ board.lnormal <- tabItem(tabName = "lnormal",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "lognormal", status = "primary", solidHeader = TRUE,
       radioButtons(paste("lnormal", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("lnormal", "range", sep="."), "範囲",
+      sliderInput(paste("lnormal", "range", sep="."), "Range",
         min = 0, max = 200, value = c(0, 20), step= 0.5),
-      sliderInput(paste("lnormal", "meanlog", sep="."), "平均log",
+      sliderInput(paste("lnormal", "meanlog", sep="."), "Expectation log",
         min = -30, max = 30, value = 0, step= 0.05),
-      sliderInput(paste("lnormal", "sdlog", sep="."), "標準偏差log",
+      sliderInput(paste("lnormal", "sdlog", sep="."), "SD log",
         min = 0, max = 10, value = 1, step= 0.05)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("lnormalPlot", 'line')
     )
   ),
@@ -559,11 +506,11 @@ board.lnormal <- tabItem(tabName = "lnormal",
 
 board.t <- tabItem(tabName = "t",
   fluidRow(
-    distPanel("t分布"),
+    distPanel("t"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDf", 
       helpText("$$
       f(x) = \\frac{\\Gamma((\\nu+1)/2)}{\\sqrt{\\nu\\pi\\,}\\,
       \\Gamma(\\nu/2)} (1+x^2/\\nu)^{-(\\nu+1)/2}
@@ -574,18 +521,18 @@ board.t <- tabItem(tabName = "t",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "t", status = "primary", solidHeader = TRUE,
       radioButtons(paste("t", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("t", "range", sep="."), "範囲",
+      sliderInput(paste("t", "range", sep="."), "Range",
         min = -100, max = 100, value = c(-10, 10), step= 0.5),
-      sliderInput(paste("t", "df", sep="."), "自由度 \\(\\nu\\)",
+      sliderInput(paste("t", "df", sep="."), "DF \\(\\nu\\)",
         min = 1, max = 20, value = 1, step= 1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("tPlot", 'line')
     )
   ),
@@ -598,11 +545,11 @@ board.t <- tabItem(tabName = "t",
 
 board.nct <- tabItem(tabName = "nct",
   fluidRow(
-    distPanel("非心t分布"),
+    distPanel("NC T"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
       f(x) =\\frac{\\nu^{\\frac{\\nu}{2}}
       \\exp\\left (-\\frac{\\nu\\mu^2}{2(x^2+\\nu)} \\right )}
@@ -616,20 +563,20 @@ board.nct <- tabItem(tabName = "nct",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "NC t", status = "primary", solidHeader = TRUE,
       radioButtons(paste("nct", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("nct", "range", sep="."), "範囲",
+      sliderInput(paste("nct", "range", sep="."), "Range",
         min = -100, max = 100, value = c(-10, 10), step= 0.5),
-      sliderInput(paste("nct", "df", sep="."), "自由度 \\(\\nu\\)",
+      sliderInput(paste("nct", "df", sep="."), "DF \\(\\nu\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("nct", "ncp", sep="."), "非中心度 \\(\\mu\\)",
+      sliderInput(paste("nct", "ncp", sep="."), "NC degree \\(\\mu\\)",
         min = 0, max = 20, value = 0, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("nctPlot", 'line')
     )
   ),
@@ -642,11 +589,11 @@ board.nct <- tabItem(tabName = "nct",
 
 board.beta <- tabItem(tabName = "beta",
   fluidRow(
-    distPanel("ベータ分布"),
+    distPanel("beta"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
       f(x)=\\frac{x^{\\alpha-1}(1-x)^{\\beta-1}}{B(\\alpha,\\beta)}
       $$")
@@ -656,20 +603,20 @@ board.beta <- tabItem(tabName = "beta",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "beta", status = "primary", solidHeader = TRUE,
       radioButtons(paste("beta", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("beta", "range", sep="."), "範囲",
+      sliderInput(paste("beta", "range", sep="."), "Range",
         min = 0, max = 1, value = c(0, 1), step= 0.01),
-      sliderInput(paste("beta", "shape1", sep="."), "形状 \\(\\alpha\\)",
+      sliderInput(paste("beta", "shape1", sep="."), "Shape \\(\\alpha\\)",
         min = 0, max = 20, value = 2, step= 0.1),
-      sliderInput(paste("beta", "shape2", sep="."), "形状 \\(\\beta\\)",
+      sliderInput(paste("beta", "shape2", sep="."), "Shape \\(\\beta\\)",
         min = 0, max = 20, value = 2, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("betaPlot", 'line')
     )
   ),
@@ -682,11 +629,11 @@ board.beta <- tabItem(tabName = "beta",
 
 board.ncbeta <- tabItem(tabName = "ncbeta",
   fluidRow(
-    distPanel("非心ベータ分布", 'Noncentral_beta_distribution'),
+    distPanel("Nc beta", 'Noncentral_beta_distribution'),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x) = \\sum_{j=0}^\\infty \\frac{1}{j!}
         \\left(\\frac{\\lambda}{2}\\right)^je^{-\\lambda/2}
@@ -698,22 +645,22 @@ board.ncbeta <- tabItem(tabName = "ncbeta",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "nc beta", status = "primary", solidHeader = TRUE,
       radioButtons(paste("ncbeta", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("ncbeta", "range", sep="."), "範囲",
+      sliderInput(paste("ncbeta", "range", sep="."), "Range",
         min = 0, max = 1, value = c(0, 1), step= 0.01),
-      sliderInput(paste("ncbeta", "shape1", sep="."), "形状 \\(\\alpha\\)",
+      sliderInput(paste("ncbeta", "shape1", sep="."), "Shape \\(\\alpha\\)",
         min = 0, max = 20, value = 2, step= 0.1),
-      sliderInput(paste("ncbeta", "shape2", sep="."), "形状 \\(\\beta\\)",
+      sliderInput(paste("ncbeta", "shape2", sep="."), "Shape \\(\\beta\\)",
         min = 0, max = 20, value = 2, step= 0.1),
-      sliderInput(paste("ncbeta", "ncp", sep="."), "非中心度 \\(\\lambda\\)",
+      sliderInput(paste("ncbeta", "ncp", sep="."), "NC Degree \\(\\lambda\\)",
         min = 0, max = 20, value = 0, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("ncbetaPlot", 'line')
     )
   ),
@@ -726,11 +673,11 @@ board.ncbeta <- tabItem(tabName = "ncbeta",
 
 board.unif <- tabItem(tabName = "unif",
   fluidRow(
-    distPanel("連続一様分布"),
+    distPanel("Uniform"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x)=\\begin{cases}
         \\frac{1}{b - a} & \\mathrm{for}\\ a \\le x \\le b, \\\\[8pt]
@@ -743,16 +690,16 @@ board.unif <- tabItem(tabName = "unif",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "unif", status = "primary", solidHeader = TRUE,
       radioButtons(paste("unif", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("unif", "range", sep="."), "範囲",
+      sliderInput(paste("unif", "range", sep="."), "Range",
         min = -50, max = 50, value = c(0, 1), step= 0.5)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("unifPlot", 'line')
     )
   ),
@@ -765,11 +712,11 @@ board.unif <- tabItem(tabName = "unif",
 
 board.logis <- tabItem(tabName = "logis",
   fluidRow(
-    distPanel("ロジスティック分布"),
+    distPanel("logis"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(x;\\mu,s) = \\frac{\\exp(-\\frac{x-\\mu}{s})}{s(1+\\exp(-\\frac{x-\\mu}{s}))^2}
       $$")
@@ -779,20 +726,20 @@ board.logis <- tabItem(tabName = "logis",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "logis", status = "primary", solidHeader = TRUE,
       radioButtons(paste("logis", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("logis", "range", sep="."), "範囲",
+      sliderInput(paste("logis", "range", sep="."), "Range",
         min = -100, max = 100, value = c(-10, 10), step= 0.5),
-      sliderInput(paste("logis", "location", sep="."), "位置 \\(\\mu\\)",
+      sliderInput(paste("logis", "location", sep="."), "Location \\(\\mu\\)",
         min = -20, max = 20, value = 2, step= 0.1),
-      sliderInput(paste("logis", "scale", sep="."), "尺度 \\(s\\)",
+      sliderInput(paste("logis", "scale", sep="."), "Shape \\(s\\)",
         min = 0, max = 20, value = 1, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("logisPlot", 'line')
     )
   ),
@@ -805,11 +752,11 @@ board.logis <- tabItem(tabName = "logis",
 
 board.weibull <- tabItem(tabName = "weibull",
   fluidRow(
-    distPanel("ワイブル分布"),
+    distPanel("Weibull"),
     box(
       width = 7,
       status = "primary",
-      title = "確率密度関数", 
+      title = "PDF", 
       helpText("$$
         f(t)=\\frac{m}{\\eta}\\left(\\frac{t}{\\eta}\\right)^{m-1}
         \\exp \\left\\{-\\left(\\frac{t}{\\eta}\\right)^m\\right\\}
@@ -820,20 +767,20 @@ board.weibull <- tabItem(tabName = "weibull",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "weibull", status = "primary", solidHeader = TRUE,
       radioButtons(paste("weibull", "p_or_c", sep="."), "",
-        c("確率密度関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("weibull", "range", sep="."), "範囲",
+      sliderInput(paste("weibull", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 0.5),
-      sliderInput(paste("weibull", "shape", sep="."), "形状 \\(m\\)",
+      sliderInput(paste("weibull", "shape", sep="."), "Shape \\(m\\)",
         min = 0, max = 20, value = 1, step= 0.1),
-      sliderInput(paste("weibull", "scale", sep="."), "尺度 \\(\\eta\\)",
+      sliderInput(paste("weibull", "scale", sep="."), "Scale \\(\\eta\\)",
         min = 0, max = 20, value = 1, step= 0.1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("weibullPlot", 'line')
     )
   ),
@@ -844,14 +791,14 @@ board.weibull <- tabItem(tabName = "weibull",
   )
 )
 
-# 離散分布
+#  
 board.geom <- tabItem(tabName = "geom",
   fluidRow(
-    distPanel("幾何分布"),
+    distPanel("Geom"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PDF", 
       helpText("$$
         Pr(X = k) = p(1-p)^{k}
       $$")
@@ -861,18 +808,18 @@ board.geom <- tabItem(tabName = "geom",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "geom", status = "primary", solidHeader = TRUE,
       radioButtons(paste("geom", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("geom", "range", sep="."), "範囲",
+      sliderInput(paste("geom", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1),
-      sliderInput(paste("geom", "prob", sep="."), "成功確率 \\(p\\)",
+      sliderInput(paste("geom", "prob", sep="."), "Probability \\(p\\)",
         min = 0, max = 1, value = 0.5, step= 0.01)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("geomPlot", 'scatter')
     )
   ),
@@ -885,11 +832,11 @@ board.geom <- tabItem(tabName = "geom",
 
 board.hyper <- tabItem(tabName = "hyper",
   fluidRow(
-    distPanel("超幾何分布"),
+    distPanel("HG"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PDF", 
       helpText("$$
       \\operatorname{P}(X=x)
       = \\frac{\\binom{m}{x}\\binom{n}{k-x}}{\\binom{m+n}{k}}
@@ -900,22 +847,22 @@ board.hyper <- tabItem(tabName = "hyper",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "HG", status = "primary", solidHeader = TRUE,
       radioButtons(paste("hyper", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("hyper", "range", sep="."), "範囲",
+      sliderInput(paste("hyper", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1),
-      sliderInput(paste("hyper", "m", sep="."), "成功状態の数 \\(m\\)",
+      sliderInput(paste("hyper", "m", sep="."), "Numbers of Successes \\(m\\)",
         min = 0, max = 100, value = 50, step= 1),
-      sliderInput(paste("hyper", "n", sep="."), "失敗状態の数 \\(n\\)",
+      sliderInput(paste("hyper", "n", sep="."), "Numbers of Failers \\(n\\)",
         min = 0, max = 100, value = 50, step= 1),
-      sliderInput(paste("hyper", "k", sep="."), "取り出す数 \\(k\\)",
+      sliderInput(paste("hyper", "k", sep="."), "Numbers of Trials \\(k\\)",
         min = 0, max = 100, value = 10, step= 1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("hyperPlot", 'scatter')
     )
   ),
@@ -928,11 +875,11 @@ board.hyper <- tabItem(tabName = "hyper",
 
 board.binom <- tabItem(tabName = "binom",
   fluidRow(
-    distPanel("二項分布"),
+    distPanel("Binomial"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PDF", 
       helpText("$$
       P[X=k]={n\\choose k}p^k(1-p)^{n-k}\\quad\\mbox{for}\\ k=0,1,2,\\dots,n
       $$")
@@ -942,20 +889,20 @@ board.binom <- tabItem(tabName = "binom",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "Binomial", status = "primary", solidHeader = TRUE,
       radioButtons(paste("binom", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PDF"="p", "CDF"="c")
       ),
-      sliderInput(paste("binom", "range", sep="."), "範囲",
+      sliderInput(paste("binom", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1),
-      sliderInput(paste("binom", "size", sep="."), "試行回数 \\(n\\)",
+      sliderInput(paste("binom", "size", sep="."), "Numbers of Trials \\(n\\)",
         min = 0, max = 40, value = 10, step= 1),
-      sliderInput(paste("binom", "prob", sep="."), "成功確率 \\(p\\)",
+      sliderInput(paste("binom", "prob", sep="."), "Probability of Success \\(p\\)",
         min = 0, max = 1, value = 0.5, step= 0.01)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("binomPlot", 'scatter')
     )
   ),
@@ -968,11 +915,11 @@ board.binom <- tabItem(tabName = "binom",
 
 board.nbinom <- tabItem(tabName = "nbinom",
   fluidRow(
-    distPanel("負の二項分布"),
+    distPanel("Negative Binomial"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PMF", 
       helpText("$$
         f(x)=P(X=x) = {x-1 \\choose r-1} p^r (1-p)^{x-r}
       $$")
@@ -982,20 +929,20 @@ board.nbinom <- tabItem(tabName = "nbinom",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "NB", status = "primary", solidHeader = TRUE,
       radioButtons(paste("nbinom", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PMF"="p", "CDF"="c")
       ),
-      sliderInput(paste("nbinom", "range", sep="."), "範囲",
+      sliderInput(paste("nbinom", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1),
-      sliderInput(paste("nbinom", "size", sep="."), "成功回数 \\(r\\)",
+      sliderInput(paste("nbinom", "size", sep="."), "Numbers of Successes \\(r\\)",
         min = 1, max = 20, value = 1, step= 1),
-      sliderInput(paste("nbinom", "prob", sep="."), "成功確率 \\(p\\)",
+      sliderInput(paste("nbinom", "prob", sep="."), "Probability of Successes  \\(p\\)",
         min = 0, max = 1, value = 0.5, step= 0.01)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("nbinomPlot", 'scatter')
     )
   ),
@@ -1008,11 +955,11 @@ board.nbinom <- tabItem(tabName = "nbinom",
 
 board.pois <- tabItem(tabName = "pois",
   fluidRow(
-    distPanel("ポアソン分布"),
+    distPanel("Poisson"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PMF", 
       helpText("$$
       P(X=k)=\\frac{\\lambda^k e^{-\\lambda}}{k!}
       $$")
@@ -1022,18 +969,18 @@ board.pois <- tabItem(tabName = "pois",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "poi", status = "primary", solidHeader = TRUE,
       radioButtons(paste("pois", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PMF"="p", "CDF"="c")
       ),
-      sliderInput(paste("pois", "range", sep="."), "範囲",
+      sliderInput(paste("pois", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1),
       sliderInput(paste("pois", "lambda", sep="."), "\\(\\lambda\\)",
         min = 1, max = 20, value = 1, step= 0.5)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("poisPlot", 'scatter')
     )
   ),
@@ -1046,11 +993,11 @@ board.pois <- tabItem(tabName = "pois",
 
 board.dunif <- tabItem(tabName = "dunif",
   fluidRow(
-    distPanel("離散一様分布"),
+    distPanel("dunif"),
     box(
       width = 7,
       status = "primary",
-      title = "確率関数", 
+      title = "PMF", 
       helpText("$$
       f(x)=\\begin{cases}
       \\frac{1}{n} & \\mathrm{for}\\ a \\le x \\le b, \\\\[8pt]
@@ -1063,16 +1010,16 @@ board.dunif <- tabItem(tabName = "dunif",
     box(
       width = 5,
       withMathJax(),
-      title = "パラメータ", status = "primary", solidHeader = TRUE,
+      title = "dunif", status = "primary", solidHeader = TRUE,
       radioButtons(paste("dunif", "p_or_c", sep="."), "",
-        c("確率関数"="p", "累積分布関数"="c")
+        c("PMF"="p", "CDF"="c")
       ),
-      sliderInput(paste("dunif", "range", sep="."), "範囲",
+      sliderInput(paste("dunif", "range", sep="."), "Range",
         min = 0, max = 100, value = c(0, 20), step= 1)
     ),
     box(
       width = 7,
-      title = "プロット", status = "primary", solidHeader = TRUE,
+      title = "Plot", status = "primary", solidHeader = TRUE,
       nvd3ChartOutput("dunifPlot", 'scatter')
     )
   ),
@@ -1089,7 +1036,7 @@ board.dunif <- tabItem(tabName = "dunif",
 body <- dashboardBody(
   jsFiles,
   tabItems(
-    # 連続分布
+    #  
     board.norm,
     board.erlang,
     board.f,
